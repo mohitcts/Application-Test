@@ -1,0 +1,31 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 mb-3 mt-4 d-flex justify-content-end">
+            <button class="addnew me-auto" type="button" name="Add" title="Add" (click)="addBtnAction()"><i class="bi bi-plus-lg"></i> Add</button>
+            <button class="addnew edit" type="button" name="Edit" title="Edit" (click)="onEditButtonClick()" [disabled]="selectedRows.length != 1"><i class="bi bi-pencil-fill"></i> Edit</button>
+            <button class="addnew delete" type="button" name="Delete" title="Delete" (click)="deleteAction()" [disabled]="selectedRows.length == 0"><i class="bi bi-trash-fill"></i> Delete</button>
+        </div>
+        <div class="col-lg-12">
+            <ag-grid-angular 
+                style="height: 400px;"
+                class="ag-theme-balham"
+                [rowData]="list" 
+                [columnDefs]="columnDefs"
+                [defaultColDef]="defaultColDef"
+                [pagination]="true"
+                (cellValueChanged)="onCellValueChanged($event)"
+                [components]="components" 
+                [rowSelection]="rowSelection"
+                (selectionChanged)="onSelectionChanged($event)"
+                (gridReady)="onGridReady($event)"
+                [suppressRowClickSelection]="true"
+                [isRowSelectable]="isRowSelectable"
+                >
+            </ag-grid-angular>
+        </div>
+    </div>
+</div>
+
+<app-add-modal (callByChildEvent)="callByChildAction()"></app-add-modal>
+<app-edit-modal [row]="row" (callByChildEvent)="callByChildAction()"></app-edit-modal>

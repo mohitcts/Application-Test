@@ -1,0 +1,84 @@
+<ng-template #addModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="coutry-list-modal">
+            <form [formGroup]="addForm" (ngSubmit)="addAction()">
+                
+                <div class="form-group mb-2">
+                    <label>Name <span class="astrik">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" formControlName="name" required="" />
+                    <div *ngIf="af.name.invalid && (af['name'].dirty || af['name'].touched)" class="invalid_input">
+                        <div *ngIf="af['name'].errors?.['required']">
+                            Name is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="form-group col-md-6 mb-2">
+                    <label>State <span class="astrik">*</span></label>
+                    <input type="text" class="form-control" id="state" name="state" formControlName="state"
+                        required="" />
+                    <div *ngIf="af.state.invalid && (af['state'].dirty || af['state'].touched)" class="invalid_input">
+
+                        <div *ngIf="af['state'].errors?.['required']">
+                            State is required.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group  col-md-6 mb-2">
+                    <label>Zip <span class="astrik">*</span></label>
+                    <input type="text" class="form-control" id="zip" name="zip" formControlName="zip" required="" />
+                    <div *ngIf="af.zip.invalid && (af['zip'].dirty || af['zip'].touched)" class="invalid_input">
+
+                        <div *ngIf="af['zip'].errors?.['required']">
+                            Zip is required.
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                <div class="form-group col-md-6 mb-2">
+                    <label>Amount <span class="astrik">*</span></label>
+                    <input type="number" step=".01" class="form-control" id="amount" name="amount"
+                        formControlName="amount" required="" />
+                    <div *ngIf="af.amount.invalid && (af['amount'].dirty || af['amount'].touched)"
+                        class="invalid_input">
+
+                        <div *ngIf="af['amount'].errors?.['required']">
+                            Amount is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-2">
+                    <label>Qty <span class="astrik">*</span></label>
+                    <input type="number" step="1" min="1" class="form-control" id="qty" name="qty" formControlName="qty"
+                        required="" />
+                    <div *ngIf="af.qty.invalid && (af['qty'].dirty || af['qty'].touched)" class="invalid_input">
+
+                        <div *ngIf="af['qty'].errors?.['required']">
+                            Qty is required.
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="form-group mb-2">
+                    <label>Item <span class="astrik">*</span></label>
+                    <input type="text" class="form-control" id="item" name="item" formControlName="item" requried="" />
+                    <div *ngIf="af.item.invalid && (af['item'].dirty || af['item'].touched)" class="invalid_input">
+                        <div *ngIf="af['item'].errors?.['required']">
+                            Item is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    <button class="readmore me-2" type="submit" [disabled]="!addForm.valid">Add</button>
+                    <button class="readmore btn-default" type="button" (click)="d('Cross click')">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
