@@ -1,5 +1,5 @@
 NAME:- GET ALL RECORD
-URL:- http://localhost/hcl/index.php?action=getAll
+URL:- http://localhost/hcl/index.php?action=getAllRecord
 METHOD:- GET
 RESPONSE:- 
 {
@@ -64,8 +64,8 @@ RESPONSE:-
 
 ###########################################################################################################
 
-NAME:- STORE RECORD
-URL:- http://localhost/hcl/index.php?action=store
+NAME:- SAVE RECORD
+URL:- http://localhost/hcl/index.php?action=saveRecord
 METHOD:- POST
 REQUEST:- 
 {
@@ -82,7 +82,7 @@ RESPONSE:- JSON of all data.
 ###########################################################################################################
 
 NAME:- UPDATE RECORD
-URL:- http://localhost/hcl/index.php?action=update
+URL:- http://localhost/hcl/index.php?action=updateRecord
 METHOD:- POST
 REQUEST:- 
 {
@@ -100,7 +100,7 @@ RESPONSE:- JSON of all data.
 
 
 NAME:- DELETE RECORD
-URL:- http://localhost/hcl/index.php?action=delete&id={id}
+URL:- http://localhost/hcl/index.php?action=deleteRecord&ids={id}
 METHOD:- POST
 REQUEST:- 
 RESPONSE:- JSON of all data.
