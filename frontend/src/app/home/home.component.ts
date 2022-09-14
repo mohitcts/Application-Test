@@ -13,7 +13,9 @@ import { ColDef, FirstDataRenderedEvent, GridReadyEvent, IsRowSelectable, RowNod
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  // access the template of EditModalComponent
   @ViewChild(EditModalComponent, { static: true }) editModal: any;
+  // access the template of AddModalComponent
   @ViewChild(AddModalComponent, { static: true }) addModal: any;
 
   list: Array<any> = [];
@@ -27,10 +29,6 @@ export class HomeComponent implements OnInit {
   rowData: Array<any> = [];
 
   private gridApi!: GridApi<any>;
-
-  public isRowSelectable: IsRowSelectable = (params: RowNode<any>) => {
-    return true;
-  };
 
   components = {
     'buttonComponent': ButtonComponent
@@ -65,6 +63,12 @@ export class HomeComponent implements OnInit {
     } */
   ];
 
+  // row selectable configuration
+  public isRowSelectable: IsRowSelectable = (params: RowNode<any>) => {
+    return true;
+  };
+
+  //on cell value change action
   onCellValueChanged(event: any) {
     console.log(event);
   }
@@ -168,11 +172,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  // row selection change action
   onSelectionChanged(event: any) {
     this.selectedRows = this.gridApi.getSelectedRows();
-    console.log(this.selectedRows);
+    //console.log(this.selectedRows);
   }
 
+  // grid ready action
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.getAllRecord();

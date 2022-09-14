@@ -20,11 +20,14 @@
                 <div class="form-group col-md-6 mb-2">
                     <label>State <span class="astrik">*</span></label>
                     <input type="text" class="form-control" id="state" name="state" formControlName="state"
-                        required="" />
+                        required="" pattern="^[a-zA-Z \-\']+" />
                     <div *ngIf="af.state.invalid && (af['state'].dirty || af['state'].touched)" class="invalid_input">
 
                         <div *ngIf="af['state'].errors?.['required']">
                             State is required.
+                        </div>
+                        <div *ngIf="af['state'].errors?.['pattern']">
+                            Allow only alphabets.
                         </div>
                     </div>
                 </div>
@@ -56,7 +59,7 @@
                 <div class="form-group col-md-6 mb-2">
                     <label>Qty <span class="astrik">*</span></label>
                     <input type="number" step="1" min="1" class="form-control" id="qty" name="qty" formControlName="qty"
-                        required="" />
+                        required="" (keypress)="qtyKeyPress($event)"  />
                     <div *ngIf="af.qty.invalid && (af['qty'].dirty || af['qty'].touched)" class="invalid_input">
 
                         <div *ngIf="af['qty'].errors?.['required']">
@@ -75,7 +78,7 @@
                     </div>
                 </div>
                 <div class="form-group mb-2">
-                    <button class="readmore me-2" type="submit" [disabled]="!addForm.valid">Add</button>
+                    <button class="readmore me-2" type="submit" [disabled]="!addForm.valid">Save</button>
                     <button class="readmore btn-default" type="button" (click)="d('Cross click')">Close</button>
                 </div>
             </form>

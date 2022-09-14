@@ -30,7 +30,9 @@ class CSVReader {
 		// throw an exception if unable to open file.
         if ($this->fileHandle === FALSE) {
             throw new \Exception("Unable to open file: {$filename}");
-        }		
+        }
+		
+		// assign first row as column
 		$this->headerOfCsv = $header = fgetcsv($this->fileHandle, 1, $this->delimiter);
     }
 	
@@ -95,6 +97,7 @@ class CSVReader {
 	
 	// convert array to csv file format
 	private function arrayToCsv( array &$fields, $delimiter = ',', $enclosure = '"', $encloseAll = true, $nullToMysqlNull = false ) {
+		//Quote regular expression characters
 		$delimiter_esc = preg_quote($delimiter, '/');
 		$enclosure_esc = preg_quote($enclosure, '/');
 

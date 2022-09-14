@@ -21,11 +21,15 @@
                 <div class="form-group col-md-6 mb-2">
                     <label>State <span class="astrik">*</span></label>
                     <input type="text" class="form-control" id="state" name="state" requried=""
-                        formControlName="state" />
+                        formControlName="state" pattern="^[a-zA-Z \-\']+" />
                     <div *ngIf="ef.state.invalid && (ef['state'].dirty || ef['state'].touched)" class="invalid_input">
 
                         <div *ngIf="ef['state'].errors?.['required']">
                             State is required.
+                        </div>
+                        
+                        <div *ngIf="ef['state'].errors?.['pattern']">
+                            Allow only alphabets.
                         </div>
                     </div>
                 </div>
@@ -55,8 +59,8 @@
                 </div>
                 <div class="form-group col-md-6 mb-2">
                     <label>Qty <span class="astrik">*</span></label>
-                    <input type="number" step="1" class="form-control" id="qty" name="qty" requried=""
-                        formControlName="qty" />
+                    <input type="number" step="1" min="1"  class="form-control" id="qty" name="qty" requried=""
+                        formControlName="qty" (keypress)="qtyKeyPress($event)" />
                     <div *ngIf="ef.qty.invalid && (ef['qty'].dirty || ef['qty'].touched)" class="invalid_input">
 
                         <div *ngIf="ef['qty'].errors?.['required']">
@@ -76,7 +80,7 @@
                     </div>
                 </div>
                 <div class="form-group mb-4">
-                    <button class="readmore me-2" type="submit" [disabled]="!editForm.valid">Update</button>
+                    <button class="readmore me-2" type="submit" [disabled]="!editForm.valid">Save</button>
                     <button class="readmore btn-default" type="button" (click)="d('Cross click')">Close</button>
                 </div>
             </form>

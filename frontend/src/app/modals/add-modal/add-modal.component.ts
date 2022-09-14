@@ -28,7 +28,8 @@ export class AddModalComponent implements OnInit {
       Validators.required
     ]),
     state: new FormControl('', [
-      Validators.required
+      Validators.required,
+      Validators.pattern('^[a-zA-Z \-\']+')
     ]),
     zip: new FormControl('', [
       Validators.required
@@ -113,5 +114,14 @@ export class AddModalComponent implements OnInit {
 
   // getter for addForm
   get af() { return this.addForm.controls; }
+
+  //key press event for quantity field
+  qtyKeyPress(event: any) {
+    let pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (event.keyCode != 8 && !pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
 
 }

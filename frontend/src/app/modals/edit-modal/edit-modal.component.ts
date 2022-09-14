@@ -25,7 +25,8 @@ export class EditModalComponent implements OnInit {
       Validators.required
     ]),
     state: new FormControl('', [
-      Validators.required
+      Validators.required,
+      Validators.pattern('^[a-zA-Z \-\']+')
     ]),
     zip: new FormControl('', [
       Validators.required
@@ -151,5 +152,14 @@ export class EditModalComponent implements OnInit {
 
   // getter for editForm
   get ef() { return this.editForm.controls; }
+
+  //key press event for quantity field
+  qtyKeyPress(event: any) {
+    let pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (event.keyCode != 8 && !pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
 
 }

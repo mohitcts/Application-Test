@@ -20,6 +20,7 @@ class Api {
 	public function getAllRecord() {
 		$data = [];	
 		$errors = [];
+		// get all record
 		$data = $this->CSVReader->getAllRecord();
 		$this->response->jsonResponse($data, $errors, 200, 'Data list.');
 	}
@@ -76,8 +77,9 @@ class Api {
 		//save record to csv file
 		try {
 			$this->CSVReader->saveRecord($list);
+			// get all record
 			$data = $this->CSVReader->getAllRecord();
-			$this->response->jsonResponse($data, $errors, 200, 'Data added successfully.');
+			$this->response->jsonResponse($data, $errors, 200, 'New record has been created successfully.');
 		} catch (Exception $e) {
 			$this->response->jsonResponse($data, $errors, 400, $e->getMessage());	
 		}		
@@ -142,8 +144,9 @@ class Api {
 		// update the record in csv
 		try {
 			$this->CSVReader->updateRecord($id, $list);
+			// get all record
 			$data = $this->CSVReader->getAllRecord();
-			$this->response->jsonResponse($data, $errors, 200, 'Data updated successfully.');
+			$this->response->jsonResponse($data, $errors, 200, 'The record has been updated successfully.');
 		} catch (Exception $e) {
 			$this->response->jsonResponse($data, $errors, 400, $e->getMessage());	
 		}
@@ -164,11 +167,13 @@ class Api {
 			// return 400 bad request if validation fails
 			$this->response->jsonResponse([], $errors, 400, 'Please fill all the required fields.');
 		}
+		
 		// delete the record from csv
 		try {
 			$this->CSVReader->deleteRecord($ids);
+			// get all record
 			$data = $this->CSVReader->getAllRecord();
-			$this->response->jsonResponse($data, $errors, 200, 'Data deleted successfully.');
+			$this->response->jsonResponse($data, $errors, 200, 'Record has been delete successfully.');
 		} catch (Exception $e) {
 			$this->response->jsonResponse($data, $errors, 400, $e->getMessage());	
 		}
