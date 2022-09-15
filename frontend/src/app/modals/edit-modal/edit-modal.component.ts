@@ -10,7 +10,7 @@ import { DataService } from 'src/app/_services/data.service';
   styleUrls: ['./edit-modal.component.css']
 })
 export class EditModalComponent implements OnInit {
-  @ViewChild('editModal') editModal: any;
+  @ViewChild('editFormModal') editFormModal: any;
   @Input('row') row: any;
   @Output('callByChildEvent') callByChildEvent = new EventEmitter<any>();
 
@@ -32,10 +32,12 @@ export class EditModalComponent implements OnInit {
       Validators.required
     ]),
     amount: new FormControl('', [
-      Validators.required
+      Validators.required,
+      Validators.min(1)
     ]),
     qty: new FormControl('', [
-      Validators.required
+      Validators.required,
+      Validators.min(1)
     ]),
     item: new FormControl('', [
       Validators.required
@@ -52,8 +54,29 @@ export class EditModalComponent implements OnInit {
     private dataService: DataService,
     private toastrService: ToastrService
   ) { }
+  
+  isFormValueChanged: boolean = false;
 
   ngOnInit(): void {
+
+    // subscribe to edit form value change observable
+    this.editForm.valueChanges.subscribe((result) => {
+      if (
+        this.holdRowObj?.id === this.editForm.getRawValue()?.id &&
+        this.holdRowObj?.name === this.editForm.getRawValue()?.name &&
+        this.holdRowObj?.state === this.editForm.getRawValue()?.state &&
+        this.holdRowObj?.zip === this.editForm.getRawValue()?.zip &&
+        this.holdRowObj?.amount === this.editForm.getRawValue()?.amount &&
+        this.holdRowObj?.qty === this.editForm.getRawValue()?.qty &&
+        this.holdRowObj?.item === this.editForm.getRawValue()?.item
+      ) {
+        // set false if value not changed
+        this.isFormValueChanged = false;
+      } else {
+        // set true if value changed
+        this.isFormValueChanged = true;
+      }
+    });
   }
 
   ngOnChanges(): void {
@@ -72,20 +95,7 @@ export class EditModalComponent implements OnInit {
   }
 
   // edit form action
-  editAction(): void {
-    
-    if (
-      this.holdRowObj.id === this.editForm.getRawValue().id &&
-      this.holdRowObj.name === this.editForm.getRawValue().name &&
-      this.holdRowObj.state === this.editForm.getRawValue().state &&
-      this.holdRowObj.zip === this.editForm.getRawValue().zip &&
-      this.holdRowObj.amount === this.editForm.getRawValue().amount &&
-      this.holdRowObj.qty === this.editForm.getRawValue().qty &&
-      this.holdRowObj.item === this.editForm.getRawValue().item
-    ) {
-      alert('Nothing to change');
-      return;
-    }
+  editAction(): void {    
 
     if (this.editFormSubmitted) {
       return;
@@ -102,7 +112,7 @@ export class EditModalComponent implements OnInit {
       alert('Something went wrong.')
     }
     // update record
-    this._updateSub = this.dataService.update({
+    this._updateSub = this.dataService.updateRecord({
       id: this.editForm.getRawValue().id,
       name: this.editForm.getRawValue().name,
       state: this.editForm.getRawValue().state,
@@ -132,8 +142,8 @@ export class EditModalComponent implements OnInit {
   }
 
   //open modal action
-  openModal() {
-    this.modalService.open(this.editModal, { centered: true, windowClass: 'custom-modal', size: 'lg', backdrop: 'static' }).result.then((result) => {
+  openEditFormModal() {
+    this.modalService.open(this.editFormModal, { centered: true, windowClass: 'custom-modal', size: 'lg', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -151,10 +161,10 @@ export class EditModalComponent implements OnInit {
   }
 
   // getter for editForm
-  get ef() { return this.editForm.controls; }
+  get getEditForm() { return this.editForm.controls; }
 
   //key press event for quantity field
-  qtyKeyPress(event: any) {
+  qtyKeyPressEvent(event: any) {
     let pattern = /[0-9]/;
     let inputChar = String.fromCharCode(event.charCode);
     if (event.keyCode != 8 && !pattern.test(inputChar)) {

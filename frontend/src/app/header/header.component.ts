@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class HeaderComponent implements OnInit {
 
   title: string = 'GreenIT Application Challenge';
+  
   constructor() { }
 
   ngOnInit(): void {

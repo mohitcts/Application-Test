@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./add-modal.component.css']
 })
 export class AddModalComponent implements OnInit {
-  @ViewChild('addModal') addModal: any;
+  @ViewChild('addFormModal') addFormModal: any;
   closeResult: any;
   @Output('callByChildEvent') callByChildEvent = new EventEmitter<any>();
   _storeSub: any;
@@ -35,10 +35,12 @@ export class AddModalComponent implements OnInit {
       Validators.required
     ]),
     amount: new FormControl('', [
-      Validators.required
+      Validators.required,
+      Validators.min(1)
     ]),
     qty: new FormControl('', [
-      Validators.required
+      Validators.required,
+      Validators.min(1)
     ]),
     item: new FormControl('', [
       Validators.required
@@ -52,8 +54,8 @@ export class AddModalComponent implements OnInit {
   }
 
   // open modal action
-  openModal() {
-    this.modalService.open(this.addModal, { centered: true, windowClass: 'custom-modal', size: 'lg', backdrop: 'static' }).result.then((result) => {
+  openAddFormModal() {
+    this.modalService.open(this.addFormModal, { centered: true, windowClass: 'custom-modal', size: 'lg', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -78,13 +80,15 @@ export class AddModalComponent implements OnInit {
     }
 
     this.addFormSubmitted = true;
+
     // stop here if form is invalid
     if (this.addForm.invalid) {
-      alert('Edit form is not valid.');
+      alert('One or more fields are invalid or empty. Please check');
       return;
     }
+    
     // save record
-    this._storeSub = this.dataService.store({
+    this._storeSub = this.dataService.saveRecord({
       name: this.addForm.getRawValue().name,
       state: this.addForm.getRawValue().state,
       zip: this.addForm.getRawValue().zip,
@@ -113,10 +117,10 @@ export class AddModalComponent implements OnInit {
   }
 
   // getter for addForm
-  get af() { return this.addForm.controls; }
+  get getAddForm() { return this.addForm.controls; }
 
   //key press event for quantity field
-  qtyKeyPress(event: any) {
+  qtyKeyPressEvent(event: any) {
     let pattern = /[0-9]/;
     let inputChar = String.fromCharCode(event.charCode);
     if (event.keyCode != 8 && !pattern.test(inputChar)) {

@@ -19,7 +19,7 @@ export class DataService {
   }
 
   // getting all record from api
-  getAll(): Observable<any> {
+  getAllRecord(): Observable<any> {
     return this.httpClient.get(this._apiBaseUrl + '?action=getAllRecord', { headers: this._headers });
   }
 
@@ -27,7 +27,7 @@ export class DataService {
   calling store record api
   @param record object
   */
-  store(obj: any): Observable<any> {
+  saveRecord(obj: any): Observable<any> {
     return this.httpClient.post(this._apiBaseUrl + '?action=saveRecord', obj, { headers: this._headers });
   }
 
@@ -35,7 +35,7 @@ export class DataService {
   calling update record api
   @param record object & record id
   */
-  update(obj: any, id: number): Observable<any> {
+  updateRecord(obj: any, id: number): Observable<any> {
     return this.httpClient.post(this._apiBaseUrl + '?action=updateRecord&id='+id, obj, { headers: this._headers });
   }
   
@@ -43,7 +43,7 @@ export class DataService {
   calling delete record api
   @param record id
   */
-  delete(ids: Array<any>): Observable<any> {
+  deleteRecord(ids: Array<any>): Observable<any> {
     return this.httpClient.post(this._apiBaseUrl + '?action=deleteRecord&ids=' + decodeURIComponent(ids.toString()), { headers: this._headers });
   }
 }

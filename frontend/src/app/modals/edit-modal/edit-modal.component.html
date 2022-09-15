@@ -1,4 +1,4 @@
-<ng-template #editModal let-c="close" let-d="dismiss">
+<ng-template #editFormModal let-c="close" let-d="dismiss">
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Edit</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
@@ -6,82 +6,92 @@
     <div class="modal-body">
         <div class="coutry-list-modal">
             <form [formGroup]="editForm" (ngSubmit)="editAction()">
-                <div class="form-group mb-2">
-                    <input type="hidden" class="form-control" id="id" name="id" requried="" formControlName="id" />
-
-                    <label>Name <span class="astrik">*</span></label>
-                    <input type="text" class="form-control" id="name" name="name" requried="" formControlName="name" />
-                    <div *ngIf="ef.name.invalid && (ef['name'].dirty || ef['name'].touched)" class="invalid_input">
-                        <div *ngIf="ef['name'].errors?.['required']">
-                            Name is required.
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
-                <div class="form-group col-md-6 mb-2">
-                    <label>State <span class="astrik">*</span></label>
-                    <input type="text" class="form-control" id="state" name="state" requried=""
-                        formControlName="state" pattern="^[a-zA-Z \-\']+" />
-                    <div *ngIf="ef.state.invalid && (ef['state'].dirty || ef['state'].touched)" class="invalid_input">
+                    <div class="form-group col-md-12 mb-2">
+                        <input type="hidden" class="form-control" id="id" name="id" requried="" formControlName="id" />
 
-                        <div *ngIf="ef['state'].errors?.['required']">
-                            State is required.
-                        </div>
-                        
-                        <div *ngIf="ef['state'].errors?.['pattern']">
-                            Allow only alphabets.
+                        <label>Name <span class="astrik">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" requried=""
+                            formControlName="name" />
+                        <div *ngIf="getEditForm.name.invalid && (getEditForm['name'].dirty || getEditForm['name'].touched)" class="invalid_input">
+                            <div *ngIf="getEditForm['name'].errors?.['required']">
+                                Name is required.
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group col-md-6 mb-2">
-                    <label>Zip <span class="astrik">*</span></label>
-                    <input type="text" class="form-control" id="zip" name="zip" requried="" formControlName="zip" />
-                    <div *ngIf="ef.zip.invalid && (ef['zip'].dirty || ef['zip'].touched)" class="invalid_input">
 
-                        <div *ngIf="ef['zip'].errors?.['required']">
-                            Zip is required.
+                    <div class="form-group col-md-6 mb-2">
+                        <label>State <span class="astrik">*</span></label>
+                        <input type="text" class="form-control" id="state" name="state" requried=""
+                            formControlName="state" pattern="^[a-zA-Z \-\']+" />
+                        <div *ngIf="getEditForm.state.invalid && (getEditForm['state'].dirty || getEditForm['state'].touched)"
+                            class="invalid_input">
+
+                            <div *ngIf="getEditForm['state'].errors?.['required']">
+                                State is required.
+                            </div>
+
+                            <div *ngIf="getEditForm['state'].errors?.['pattern']">
+                                Allow only alphabets.
+                            </div>
                         </div>
                     </div>
-                </div>
-                </div>
-                <div class="row">
-                <div class="form-group col-md-6 mb-2">
-                    <label>Amount <span class="astrik">*</span></label>
-                    <input type="number" step=".01" class="form-control" id="amount" name="amount" requried=""
-                        formControlName="amount" />
-                    <div *ngIf="ef.amount.invalid && (ef['amount'].dirty || ef['amount'].touched)"
-                        class="invalid_input">
+                    <div class="form-group col-md-6 mb-2">
+                        <label>Zip <span class="astrik">*</span></label>
+                        <input type="text" class="form-control" id="zip" name="zip" requried="" formControlName="zip" />
+                        <div *ngIf="getEditForm.zip.invalid && (getEditForm['zip'].dirty || getEditForm['zip'].touched)" class="invalid_input">
 
-                        <div *ngIf="ef['amount'].errors?.['required']">
-                            Amount is required.
+                            <div *ngIf="getEditForm['zip'].errors?.['required']">
+                                Zip is required.
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group col-md-6 mb-2">
-                    <label>Qty <span class="astrik">*</span></label>
-                    <input type="number" step="1" min="1"  class="form-control" id="qty" name="qty" requried=""
-                        formControlName="qty" (keypress)="qtyKeyPress($event)" />
-                    <div *ngIf="ef.qty.invalid && (ef['qty'].dirty || ef['qty'].touched)" class="invalid_input">
 
-                        <div *ngIf="ef['qty'].errors?.['required']">
-                            Qty is required.
+                    <div class="form-group col-md-6 mb-2">
+                        <label>Amount <span class="astrik">*</span></label>
+                        <input type="number" step=".01" min="1" class="form-control" id="amount" name="amount" requried=""
+                            formControlName="amount" />
+                        <div *ngIf="getEditForm.amount.invalid && (getEditForm['amount'].dirty || getEditForm['amount'].touched)"
+                            class="invalid_input">
+
+                            <div *ngIf="getEditForm['amount'].errors?.['required']">
+                                Amount is required.
+                            </div>
+                            <div *ngIf="getEditForm['amount'].errors?.['min']">
+                                Amount value shloud be greater then or equal to 1.
+                            </div>
                         </div>
                     </div>
-                </div>
-                </div>
-                <div class="form-group mb-2">
-                    <label>Item <span class="astrik">*</span></label>
-                    <input type="text" class="form-control" id="item" name="item" requried="" formControlName="item" />
-                    <div *ngIf="ef.item.invalid && (ef['item'].dirty || ef['item'].touched)" class="invalid_input">
+                    <div class="form-group col-md-6 mb-2">
+                        <label>Qty <span class="astrik">*</span></label>
+                        <input type="number" step="1" min="1" class="form-control" id="qty" name="qty" requried=""
+                            formControlName="qty" (keypress)="qtyKeyPressEvent($event)" />
+                        <div *ngIf="getEditForm.qty.invalid && (getEditForm['qty'].dirty || getEditForm['qty'].touched)" class="invalid_input">
 
-                        <div *ngIf="ef['item'].errors?.['required']">
-                            Item is required.
+                            <div *ngIf="getEditForm['qty'].errors?.['required']">
+                                Qty is required.
+                            </div>
+                            <div *ngIf="getEditForm['qty'].errors?.['min']">
+                                Qty value shloud be greater then or equal to 1.
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group mb-4">
-                    <button class="readmore me-2" type="submit" [disabled]="!editForm.valid">Save</button>
-                    <button class="readmore btn-default" type="button" (click)="d('Cross click')">Close</button>
+
+                    <div class="form-group col-md-12 mb-2">
+                        <label>Item <span class="astrik">*</span></label>
+                        <input type="text" class="form-control" id="item" name="item" requried=""
+                            formControlName="item" />
+                        <div *ngIf="getEditForm.item.invalid && (getEditForm['item'].dirty || getEditForm['item'].touched)" class="invalid_input">
+
+                            <div *ngIf="getEditForm['item'].errors?.['required']">
+                                Item is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 mb-4">
+                        <button class="readmore me-2" type="submit" [disabled]="!editForm.valid || !isFormValueChanged">Save</button>
+                        <button class="readmore btn-default" type="button" (click)="d('Cross click')">Close</button>
+                    </div>
                 </div>
             </form>
         </div>

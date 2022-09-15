@@ -1,26 +1,26 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CellClickedEvent, GridApi } from 'ag-grid-community';
 import { DataService } from '../_services/data.service';
 import { ButtonComponent } from '../agbutton/button/button.component';
 import { EditModalComponent } from '../modals/edit-modal/edit-modal.component';
 import { AddModalComponent } from '../modals/add-modal/add-modal.component';
 import { ToastrService } from 'ngx-toastr';
-import { ColDef, FirstDataRenderedEvent, GridReadyEvent, IsRowSelectable, RowNode } from 'ag-grid-community';
+import { GridReadyEvent, IsRowSelectable, RowNode } from 'ag-grid-community';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   // access the template of EditModalComponent
-  @ViewChild(EditModalComponent, { static: true }) editModal: any;
+  @ViewChild(EditModalComponent, { static: true }) editFormTem: any;
   // access the template of AddModalComponent
-  @ViewChild(AddModalComponent, { static: true }) addModal: any;
+  @ViewChild(AddModalComponent, { static: true }) addFormTem: any;
 
   list: Array<any> = [];
   selectedRows: Array<any> = [];
-  _list: any;
+  _getAllRecord: any;
   row: any;
   _deleteSub: any;
   deleteActionSubmit: boolean = false;
@@ -39,6 +39,12 @@ export class HomeComponent implements OnInit {
     private toastrService: ToastrService
   ) { }
 
+  ngOnDestroy(): void {
+    // unsubscribe the observables on destroy
+    if(this._getAllRecord) { this._getAllRecord.unsubscribe(); }
+    if(this._deleteSub) { this._deleteSub.unsubscribe(); }
+  }
+
   //column default configuration
   columnDefs = [
     { headerName: 'Id', field: 'id', width: 70, headerCheckboxSelection: true, checkboxSelection: true },
@@ -48,19 +54,6 @@ export class HomeComponent implements OnInit {
     { headerName: 'Amout', field: 'amount', resizable: true, width: 100 },
     { headerName: 'Qty', field: 'qty', resizable: true, width: 100 },
     { headerName: 'Item', field: 'item', resizable: true, width: 100 },
-    /* {
-      headerName: 'Edit', cellRenderer: 'buttonComponent', cellRendererParams: {
-        onClick: this.onEditButtonClick.bind(this),
-        label: 'Edit'
-      },
-      resizable: true, width: 100
-    }, {
-      headerName: 'Delete', cellRenderer: 'buttonComponent', cellRendererParams: {
-        onClick: this.onDeleteButtonClick.bind(this),
-        label: 'Delete'
-      },
-      resizable: true, width: 100
-    } */
   ];
 
   // row selectable configuration
@@ -79,26 +72,18 @@ export class HomeComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    //this.getAll();
+
   }
 
   //action for edit button
   onEditButtonClick() {
-    //this.row = params.data;
     this.row = this.selectedRows[0];
-    this.editModal.openModal();
-    //console.log(this.row);
+    this.editFormTem.openEditFormModal();
   }
-
-  //action for delete button
-  /* onDeleteButtonClick(params: any) {
-    this.deleteAction(params.data);
-  }
-  */
 
   // get all record 
   getAllRecord() {
-    this._list = this.dataService.getAll().subscribe({
+    this._getAllRecord = this.dataService.getAllRecord().subscribe({
       next: (x: any) => {
         let res: any = x;
         this.list = res.data;
@@ -123,7 +108,7 @@ export class HomeComponent implements OnInit {
 
   //action for add button
   addBtnAction() {
-    this.addModal.openModal();
+    this.addFormTem.openAddFormModal();
   }
 
   // call this action by child component
@@ -133,27 +118,27 @@ export class HomeComponent implements OnInit {
 
   // delete action
   deleteAction(): void {
-    
+    // if selected row length is 0 then noting will happen    
     if(this.selectedRows.length == 0) {
       return;
     }
-
-    if (!confirm('Are you sure?')) {
+    // confirmation
+    if (!confirm('Are you sure, you want to delete records?')) {
       return;
     }
 
     if (this.deleteActionSubmit) {
       return;
     }
-
     this.deleteActionSubmit = true;
-    // fetch all ids
+
+    // fetching all ids from selected rows
     let ids: Array<any> = [];
     this.selectedRows.forEach((element) => {
       ids.push(element.id);
     });
     
-    this._deleteSub = this.dataService.delete(ids).subscribe({
+    this._deleteSub = this.dataService.deleteRecord(ids).subscribe({
       next: (x: any) => {
         this.deleteActionSubmit = false;
         let res = x;

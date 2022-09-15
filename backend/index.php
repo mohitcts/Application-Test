@@ -18,7 +18,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 // required files array
 $requiredFiles = [
 	//'/lib/CSVReader.php',
-	'/api.php',
+	'/CsvApi.php',
 ];
 
 foreach ($requiredFiles as $file) {
@@ -32,7 +32,7 @@ $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
 // creating object of Api class
-$apiObj = new Api();
+$apiObj = new CsvApi();
 
 // getting server method
 $method = $_SERVER['REQUEST_METHOD'];
@@ -58,13 +58,10 @@ if(isset($_GET['action']) && ($_GET['action'] == 'getAllRecord') && ($method == 
 		call_user_func_array(array($apiObj, "deleteRecordPost"), [explode(',', $_GET['ids'])]);
 	} else {
 		echo 'Id is required field.'; die;
-	}	
-	
+	}		
 } else {
 	echo 'Method not allow'; die;
 }
-
-
 
 
 ?>

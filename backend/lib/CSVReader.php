@@ -109,10 +109,10 @@ class CSVReader {
 			}
 			// Enclose fields containing $delimiter, $enclosure or whitespace
 			if ( $encloseAll || preg_match( "/(?:${delimiter_esc}|${enclosure_esc}|\s)/", $field ) ) {
-				$output[] = $enclosure . str_replace($enclosure, $enclosure . $enclosure, $field) . $enclosure;
+				$output[] = trim($enclosure . str_replace($enclosure, $enclosure . $enclosure, $field) . $enclosure);
 			}
 			else {
-				$output[] = $field;
+				$output[] = trim($field);
 			}
 		}
 		return implode( $delimiter, $output );
@@ -164,6 +164,7 @@ class CSVReader {
 				$counter++;
 			}			
 			if(!fwrite($this->fileHandle, $str)) {
+				// throw an exception if not able to write
 				throw new \Exception("Unable to update in file: {$this->filename}");
 			}
 		}		
